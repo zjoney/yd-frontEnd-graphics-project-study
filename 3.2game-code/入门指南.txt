@@ -1,0 +1,31 @@
+1.场景 Scene
+2.preload（找人设计的资源 2.5D）
+  create (游戏初始化的工作)
+  update(通俗意义上放的一般都是 更新的场景)
+3.游戏主角 + 基础场景 image、spritesheet（帧）
+4.如何开启物理引擎？
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 200 }
+        }
+    },
+5.物理引擎 弹性系数、摩擦系数 个体 组（装很多个体）统一
+6.//不让你进行move 
+  physics.add.staticGroup();
+  //动态的 怪物👹  ⭐️加分power
+  physics.add.group("star")
+  //玩家 + 武器
+  physics.add.sprite();
+  setBounce设置弹性系数
+  player.setCollideWorldBounds(true)
+7.碰撞检测
+  this.physics.add.collider(player, platforms);
+  回调函数
+8.匀速直线运动 x = x0 + v0*t
+  速度的矢量模v 给他一个角度
+  v=g*t x == 1/2g*t*t
+  V = vy*t+ 1/2g*t*t'
+9.高中物理 
+10.Phaser.Types.Input.Keyboard.CursorKeys;
+11.动画
