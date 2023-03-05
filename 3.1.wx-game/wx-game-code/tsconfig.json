@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "../yd-wx-game",
+    "module": "ESNext",
+    "target": "ESNext",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "types": ["wechat-miniprogram"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
