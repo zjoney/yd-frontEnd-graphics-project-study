@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript多线程2</title>
+</head>
+
+<body>
+    <script>
+        const wokrer = new Worker("task3.js");
+        //新建一段共享内存
+        const sharedArrayBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 100000);
+        const sharedArray = new Int32Array(sharedArrayBuffer);
+        for (let i = 0; i < 10; i++) {
+            Atomics.store(sharedArray, i, i + 1);
+        }
+        wokrer.postMessage(sharedArray);
+        const itemValue = Atomics.load(sharedArray, 2);
+        const result = "yideng" + itemValue;
+        Atomics.store(sharedArray, result);
+        const queuePos = 1;
+        Atomics.wake(sharedArray, 2, queuePos);
+        // wokrer.onmessage =  event =>  document.body.innerHTML += event.data + "<br>";
+    </script>
+</body>
+
+</html>

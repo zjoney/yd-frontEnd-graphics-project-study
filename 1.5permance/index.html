@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript调用C语言</title>
+</head>
+<body>
+    <script>
+        //yd-3d 压缩算法 Darco => js
+        //游戏业务场景 3D渲染场景 业务里复杂的技术。。
+        function loadWebAssembly(path){
+            return fetch(path)
+            .then(response=>response.arrayBuffer())
+            .then(WebAssembly.instantiate) //编译+实例化
+            // .then(buffer => WebAssembly.compile(buffer))
+            .then(mod=>mod.instance)
+            // .then(module=>{
+            //     //创建WebAssembly的一个实例
+            //     return new WebAssembly.Instance(module,imports)
+            // })
+        }
+        loadWebAssembly("./math.wasm")
+        .then(instance=>{
+            console.log(instance);
+            const add = instance.exports.add;
+            const square = instance.exports.square;
+            console.log(add(1,2));
+            console.log(square(2,4));
+        });
+    </script>
+</body>
+</html>
