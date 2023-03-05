@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图形学专题课-数学和canvas</title>
+    <style>
+        body {
+            background: #2c0d61;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas height="300" width="300" id="ydtyest"></canvas>
+    <script src="./wave.js"></script>
+    <script>
+        const canvas = document.getElementById("ydtyest");
+        const ctx = canvas.getContext("2d");
+        const drawHeart = (ctx, x = 150, y = 130, a = 9) => {
+            //所有心上小点的集合
+            const vectors = [];
+            for (let i = 0; i < 50; i++) {
+                //设置一下心上两点之间的角度 具体分成多少份
+                const step = i / 50 * (Math.PI * 2);
+                const vector = {
+                    x: a * (16 * Math.pow(Math.sin(step), 3)),
+                    y: a * (13 * Math.cos(step) - 5 * Math.cos(2 * step) - 2 * Math.cos(3 * step) - Math.cos(4 *
+                        step))
+                }
+                vectors.push(vector);
+            }
+            // return vectors;
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(x, y);
+            ctx.rotate(Math.PI);
+            for (let i = 0; i < 50; i++) {
+                const vector = vectors[i];
+                ctx.lineTo(vector.x, vector.y);
+            }
+            ctx.strokeStyle = "rgba(186,165,130,0.6)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
+            ctx.clip();
+        }
+        //绘制心形状
+        drawHeart(ctx);
+        //声明两个波浪
+        this.wave1 = new Wave({
+            canvasWidth: 300,
+            canvasHeight: 300,
+            waveWidth: 0.055,
+            waveHeight: 4,
+            speed: 0.04,
+            xOffset: 0, //初始化的偏移
+        });
+        this.wave2 = new Wave({
+            canvasWidth: 300,
+            canvasHeight: 300,
+            waveWidth: 0.04,
+            waveHeight: 3,
+            speed: 0.02,
+            colors : ["rgba(243,145,107,0.48)", "rgba(160,86,59,0.48)"],
+            xOffset: 2, //初始化的偏移
+        });
+        let nowRange = 0;
+        let rangeRange = 60;
+        const draw = () => {
+            //清空
+            ctx.clearRect(0,0,300,300);
+            if (nowRange <= rangeRange) {
+                nowRange += 1;
+            }
+            //把波浪绘制到心里
+            //更新当前的位置
+            this.wave1.update({
+                nowRange
+            });
+            //重新绘制当前的相移动
+            this.wave1.draw(ctx);
+            this.wave2.update({
+                nowRange
+            });
+            this.wave2.draw(ctx);
+            window.requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+
+</html>
