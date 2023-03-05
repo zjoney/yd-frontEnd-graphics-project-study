@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>饼图</title>
+</head>
+
+<body>
+    <canvas id="pie" width="450" height="250"></canvas>
+    <script>
+        var pie = document.getElementById("pie"),
+            data = {
+                colors: ["yellow", "violet", "chocolate", "blueviolet", "aquamarine"],
+                values: [30, 60, 80, 70, 150],
+                x: 125,
+                y: 125,
+                redius: 100
+            };
+        pieChart(pie, data);
+        //对饼图计算百分比
+        function compare(value1, vaule2) {
+            return vaule2 - value1;
+        }
+
+        function pieChart(elem, data) {
+            var ctx = elem.getContext("2d");
+            vdata = data.values,
+                sum = 390,
+                x = data.x,
+                y = data.y,
+                colors = data.colors,
+                vdata = data.values,
+                startangle = 0, //起始角度
+                rad = data.redius;
+            for (var i = 0; i < vdata.length; i++) {
+                var percent = vdata[i] / sum; //计算当前值所得的百分比
+                var endangle = startangle + percent * Math.PI * 2;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                //画饼图一定要记得把Xy挪回圆心
+                ctx.moveTo(x, y);
+                ctx.arc(x, y, rad, startangle, endangle, false);
+                ctx.fill();
+                startangle = endangle;
+            }
+        }
+    </script>
+</body>
+
+</html>

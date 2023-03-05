@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>柱状图</title>
+</head>
+
+<body>
+    <canvas id="bar" width="450" height="250"></canvas>
+    <script>
+        var bar = document.getElementById("bar"),
+            data = {
+                bDistance: 30,
+                bInterval: 20,
+                fillColor: "rgba(0, 0, 255, 0.5)",
+                labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                values: [300, 50, 100, 50, 80, 150, 120]
+            };
+        barChart(bar, data);
+        //对数组进行排序的小函数
+        function compare(value1, vaule2) {
+            return vaule2 - value1;
+        }
+
+        function barChart(elem, data) {
+            var ctx = elem.getContext("2d");
+            console.log(ctx);
+            mywidth = elem.width, //画布的宽
+                myheight = elem.height, //画布的高
+                bDistance = data.bDistance, //图表边框到画布的距离
+                bInterval = data.bInterval, //两个柱状图之间的距离
+                labels = data.labels, //矩形对应的标题
+                len = labels.length, //一共需要画几个柱状图
+                bWidth = Math.floor((mywidth - 2 * bDistance - (len + 1) * bInterval) / len), //等于每一个柱状图的宽
+                bHeight = myheight - 2 * bDistance, //外部X轴和Y轴的高度
+                values = data.values, //原来的数据
+                sortValues = values.slice(0), //基于一个纯的操作
+                seriaValues = []; //对于数组进行排序 序列化的值
+            sortValues.sort(compare);
+            if (sortValues[0] > bHeight) {
+                //每一个柱状图的高度超出了Y轴
+                for (var i = 0; i < len; i++) {
+                    seriaValues[i] = values[i] * bHeight / sortValues[0];
+                }
+            }
+            //动用canvas 绘制整个柱状图的过程
+            ctx.beginPath();
+            ctx.moveTo(bDistance, bDistance);
+            ctx.lineTo(bDistance, myheight - bDistance);
+            ctx.lineTo(mywidth - bDistance, myheight - bDistance);
+            ctx.stroke();
+            ctx.fillStyle = data.fillColor;
+            for (var i = 0; i < len; i++) {
+                var x = (bInterval + bDistance) + i * (bWidth + bInterval),
+                    y = myheight - seriaValues[i] - bDistance;
+                ctx.fillRect(x, y, bWidth, seriaValues[i]);
+            }
+        }
+    </script>
+</body>
+
+</html>
